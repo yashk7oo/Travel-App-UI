@@ -4,8 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 interface PlaceDetails {
-    place: string;
-    placeDescription: string;
+    key: string;
+    value: string;
 }
 
 const OtherScreen: React.FC = () => {
@@ -14,7 +14,7 @@ const OtherScreen: React.FC = () => {
 
     const getExistingInformation = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/getDetailsForExistingCities');
+            const response = await axios.get('http://localhost:8080/api/cities');
             console.log(response.data);
             setCityInfoResponseList(response.data);
             console.log(cityInfoResponseList);
@@ -46,7 +46,7 @@ const OtherScreen: React.FC = () => {
                          <h2>{cityInfo[Object.keys(cityInfo)[0]]}</h2>
                          {cityInfo[Object.keys(cityInfo)[1]].map((place: PlaceDetails, placeIndex: number) => (
                              <div key={placeIndex} style={{marginLeft: '20px'}}>
-                                 <p><strong>{place.place}:</strong> {place.placeDescription}</p>
+                                 <p><strong>{place.key}:</strong> {place.value}</p>
                              </div>
                         ))}
                      </div>

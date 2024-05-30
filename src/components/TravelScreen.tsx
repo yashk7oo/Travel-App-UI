@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 interface ResponseObject {
-    place: string;
-    placeDescription: string;
+    key: string;
+    value: string;
 }
 
 const TravelScreen: React.FC = () => {
     const [city, setCity] = useState<string>('');
     const [response, setResponse] = useState<ResponseObject[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async () => {
+        setLoading(true); // Show loader
         try {
-            const result = await axios.get<ResponseObject[]>(`http://localhost:8080/api/getPlacesForCity/${city}`);
+            const result = await axios.get<ResponseObject[]>(`http://localhost:8080/api/city/${city}`);
             setResponse(result.data);
         } catch (error) {
             console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false); // Hide loader
         }
     };
 
@@ -29,9 +33,10 @@ const TravelScreen: React.FC = () => {
                 placeholder="Enter city name"
             />
             <button onClick={handleSubmit}>Submit</button>
+            {loading && <div className="loader">Loading...</div>}
             <div>
                 {response.map((item, index) => (
-                    <p key={index}>{item.place} - {item.placeDescription}</p>
+                    <p key={index}>{item.key} - {item.value}</p>
                 ))}
             </div>
         </div>
